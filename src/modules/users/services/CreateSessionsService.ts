@@ -4,6 +4,7 @@ import User from "../typeorm/entities/User";
 import UsersRepository from "../typeorm/repositories/UsersRepository";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
+import authConfig from "@config/auth";
 
 interface IRequest {
   email: string;
@@ -32,9 +33,9 @@ class CreateSessionService {
 
     await usersRepository.save(user);
 
-    const token = sign({}, "b62221cf9e9203a9d61b96418c8caa96", {
+    const token = sign({}, authConfig.jwt.secret, {
       subject: user.id,
-      expiresIn: "1d",
+      expiresIn: authConfig.jwt.expiresIn,
     });
 
     return {
