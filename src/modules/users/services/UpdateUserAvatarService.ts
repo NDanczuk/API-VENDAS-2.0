@@ -8,14 +8,18 @@ import uploadConfig from "@config/upload";
 
 interface IRequest {
   user_id: string;
-  avatarFilename: string;
+  avatarFilename: string | undefined;
 }
 
-class UpdateUserService {
+class UpdateUserAvatarService {
   public async execute({ user_id, avatarFilename }: IRequest): Promise<User> {
     const usersRepository = getCustomRepository(UsersRepository);
 
     const user = await usersRepository.findById(user_id);
+
+    if (!avatarFilename) {
+      throw new AppError("File not provided!");
+    }
 
     if (!user) {
       throw new AppError("User not found!");
@@ -38,4 +42,4 @@ class UpdateUserService {
   }
 }
 
-export default UpdateUserService;
+export default UpdateUserAvatarService;
