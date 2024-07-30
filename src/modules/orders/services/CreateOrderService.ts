@@ -4,6 +4,7 @@ import Order from "../typeorm/entities/Orders";
 import OrdersRepository from "../typeorm/repositories/OrdersRepository";
 import CustomersRepository from "@modules/customers/typeorm/repositories/CustomersRepository";
 import { ProductRepository } from "@modules/products/typeorm/repositories/ProductsRepository";
+import RedisCache from "@shared/cache/RedisCache";
 
 interface IProduct {
   id: string;
@@ -78,6 +79,10 @@ class CreateOrderService {
     }));
 
     await productsRepository.save(updatedProductQuantity);
+
+    const redisCache = new RedisCache();
+
+    await redisCache.invalidate("api-vendas-PRODUCT_LIST");
 
     return order;
   }
