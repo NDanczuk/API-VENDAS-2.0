@@ -1,4 +1,4 @@
-import { ICustomer } from "../models/ICostumer";
+import { ICustomer } from "../models/ICustomer";
 import { ICreateCustomer } from "../models/ICreateCustomer";
 
 export interface ICustomersRepository {
