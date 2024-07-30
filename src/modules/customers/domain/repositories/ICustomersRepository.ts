@@ -2,6 +2,8 @@ import { ICustomer } from "../models/ICostumer";
 import { ICreateCustomer } from "../models/ICreateCustomer";
 
 export interface ICustomersRepository {
+  findAll(): Promise<ICustomer[] | undefined>;
+
   findByName(name: string): Promise<ICustomer | undefined>;
 
   findById(id: string): Promise<ICustomer | undefined>;
@@ -11,4 +13,6 @@ export interface ICustomersRepository {
   create(data: ICreateCustomer): Promise<ICustomer>;
 
   save(customer: ICustomer): Promise<ICustomer>;
+
+  remove(customer: ICustomer): Promise<void>;
 }
