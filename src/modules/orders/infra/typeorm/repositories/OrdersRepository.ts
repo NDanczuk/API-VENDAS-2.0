@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm/index.js";
 import Order from "../entities/Orders";
-import Customer from "@modules/customers/typeorm/entities/Customer";
+import Customer from "@modules/customers/infra/typeorm/entities/Customer";
 
 interface IProduct {
   product_id: string;
