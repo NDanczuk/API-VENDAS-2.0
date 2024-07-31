@@ -2,10 +2,9 @@ import { v4 as uuidv4 } from "uuid";
 import Customer from "@modules/customers/infra/typeorm/entities/Customer";
 import { ICustomersRepository } from "@modules/customers/domain/repositories/ICustomersRepository";
 import { ICreateCustomer } from "@modules/customers/domain/models/ICreateCustomer";
+import { ICustomer } from "@modules/customers/domain/models/ICustomer";
 
-class FakeCustomersRepository
-  implements Omit<ICustomersRepository, "remove" | "findAll">
-{
+class FakeCustomersRepository implements ICustomersRepository {
   private customers: Customer[] = [];
 
   public async create({ name, email }: ICreateCustomer): Promise<Customer> {
@@ -24,6 +23,12 @@ class FakeCustomersRepository
     Object.assign(this.customers, customer);
 
     return customer;
+  }
+
+  public async remove(customer: Customer): Promise<void> {}
+
+  public async findAll(): Promise<ICustomer[] | undefined> {
+    return undefined;
   }
 
   public async findByName(name: string): Promise<Customer | undefined> {
