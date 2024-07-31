@@ -1,21 +1,24 @@
-import { getCustomRepository } from "typeorm";
+import { inject, injectable } from "tsyringe";
 import path from "path";
 import fs from "fs";
 import AppError from "@shared/errors/AppError";
-import User from "../infra/typeorm/entities/User";
-import UsersRepository from "../infra/typeorm/repositories/UsersRepository";
 import uploadConfig from "@config/upload";
+import { IUpdateUserAvatar } from "../domain/models/IUpdateUserAvatar";
+import { IUser } from "../domain/models/IUser";
+import { IUsersRepository } from "../domain/repositories/IUsersRepository";
 
-interface IRequest {
-  user_id: string;
-  avatarFilename: string | undefined;
-}
-
+@injectable()
 class UpdateUserAvatarService {
-  public async execute({ user_id, avatarFilename }: IRequest): Promise<User> {
-    const usersRepository = getCustomRepository(UsersRepository);
+  constructor(
+    @inject("UsersRepository")
+    private usersRepository: IUsersRepository,
+  ) {}
 
-    const user = await usersRepository.findById(user_id);
+  public async execute({
+    user_id,
+    avatarFilename,
+  }: IUpdateUserAvatar): Promise<IUser> {
+    const user = await this.usersRepository.findById(user_id);
 
     if (!avatarFilename) {
       throw new AppError("File not provided!");
@@ -36,7 +39,7 @@ class UpdateUserAvatarService {
 
     user.avatar = avatarFilename;
 
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
 
     return user;
   }

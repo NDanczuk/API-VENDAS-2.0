@@ -1,47 +1,40 @@
-import { getCustomRepository } from "typeorm";
+import { inject, injectable } from "tsyringe";
 import AppError from "@shared/errors/AppError";
-import User from "../infra/typeorm/entities/User";
-import UsersRepository from "../infra/typeorm/repositories/UsersRepository";
 import { compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+import { sign, Secret } from "jsonwebtoken";
 import authConfig from "@config/auth";
-
-interface IRequest {
-  email: string;
-  password: string;
-}
-
-interface IResponse {
-  user: User;
-  token: string;
-}
-
+import { ICreateSession } from "../domain/models/ICreateSession";
+import { IUserAuthenticated } from "../domain/models/IUserAuthenticated";
+import { IUsersRepository } from "../domain/repositories/IUsersRepository";
+@injectable()
 class CreateSessionService {
-  public async execute({ email, password }: IRequest): Promise<IResponse> {
-    const usersRepository = getCustomRepository(UsersRepository);
-    const user = await usersRepository.findByEmail(email);
+  constructor(
+    @inject("UsersRepository")
+    private usersRepository: IUsersRepository,
+  ) {}
+
+  public async execute({
+    email,
+    password,
+  }: ICreateSession): Promise<IUserAuthenticated> {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError("Incorrect login credentials!", 401);
+      throw new AppError("Incorrect credentials", 401);
     }
 
     const passwordConfirmed = await compare(password, user.password);
 
     if (!passwordConfirmed) {
-      throw new AppError("Incorrect login credentials!", 401);
+      throw new AppError("Incorrect credentials", 401);
     }
 
-    await usersRepository.save(user);
-
-    const token = sign({}, authConfig.jwt.secret, {
+    const token = sign({}, authConfig.jwt.secret as Secret, {
       subject: user.id,
       expiresIn: authConfig.jwt.expiresIn,
     });
 
-    return {
-      user,
-      token,
-    };
+    return { user, token };
   }
 }
 
