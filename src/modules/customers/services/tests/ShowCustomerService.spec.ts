@@ -15,7 +15,7 @@ describe("DeleteCustomer", () => {
     showCustomer = new ShowCustomerService(fakeCustomersRepository);
   });
 
-  it("should be able to delete a customer", async () => {
+  it("should be able to show a customer", async () => {
     await updateCustomer.execute({
       id: "c3150c21-425e-456b-bec3-155bf531bf8f",
       name: "Jorge Prego",
@@ -29,7 +29,7 @@ describe("DeleteCustomer", () => {
     );
   });
 
-  it("should not be able to delete a non existent customer", async () => {
+  it("should not be able to show a non existent customer", async () => {
     await updateCustomer.execute({
       id: "c3150c21-425e-456b-bec3-155bf531bf8f",
       name: "Jorge Prego",
