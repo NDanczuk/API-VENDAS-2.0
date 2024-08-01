@@ -3,7 +3,6 @@ import Customer from "@modules/customers/infra/typeorm/entities/Customer";
 import { ICustomersRepository } from "@modules/customers/domain/repositories/ICustomersRepository";
 import { ICreateCustomer } from "@modules/customers/domain/models/ICreateCustomer";
 import { ICustomer } from "@modules/customers/domain/models/ICustomer";
-import { IUpdateCustomer } from "../../models/IUpdateCustomer";
 
 class FakeCustomersRepository implements ICustomersRepository {
   private customers: Customer[] = [
