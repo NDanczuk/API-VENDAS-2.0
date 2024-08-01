@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import AppError from "@shared/errors/AppError";
-import FakeHashProvider from "../providers/HashProvider/fakes/FakeHashProvider";
-import FakeUsersRepository from "../domain/repositories/fakes/FakeUsersRepository";
-import CreateSessionService from "./CreateSessionsService";
+import FakeHashProvider from "../../providers/HashProvider/fakes/FakeHashProvider";
+import FakeUsersRepository from "../../domain/repositories/fakes/FakeUsersRepository";
+import CreateSessionService from "../CreateSessionsService";
 
 let fakeUsersRepository: FakeUsersRepository;
 let createSession: CreateSessionService;
