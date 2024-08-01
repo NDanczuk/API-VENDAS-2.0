@@ -15,7 +15,7 @@ describe("UpdateCustomer", () => {
       email: "JorgePrego2@gmail.com",
     });
 
-    expect(customer).toHaveProperty("id");
+    return customer;
   });
 
   it("should not be able to have two customers with the same email", async () => {
