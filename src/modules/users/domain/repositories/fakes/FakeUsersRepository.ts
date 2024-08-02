@@ -4,7 +4,25 @@ import { IUsersRepository } from "@modules/users/domain/repositories/IUsersRepos
 import User from "@modules/users/infra/typeorm/entities/User";
 
 class FakeUsersRepository implements IUsersRepository {
-  private users: User[] = [];
+  private users: User[] = [
+    {
+      name: "Jorge Prego",
+      email: "Prego@gmail.com",
+      password: "Prego",
+      id: "c3150c21-425e-456b-bec3-155bf531bf8f",
+      created_at: new Date(2024),
+      updated_at: new Date(2024),
+      avatar:
+        "/home/nicolasdanczuck/workspace/VS/API-VENDAS-2.0/uploads/49c3faf5a3a8260123a1-20240622_160537.jpg",
+      getAvatarUrl(): string | null {
+        if (!this.avatar) {
+          return null;
+        }
+
+        return `${process.env.APP_API_URL}/files/${this.avatar}`;
+      },
+    },
+  ];
 
   public async create({ name, email, password }: ICreateUser): Promise<User> {
     const user = new User();

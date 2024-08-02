@@ -22,7 +22,7 @@ describe("UpdateCustomer", () => {
     const fakeCustomersRepository = new FakeCustomersRepository();
 
     const updateCustomer = new UpdateCustomerService(fakeCustomersRepository);
-    const customer = await updateCustomer.execute({
+    await updateCustomer.execute({
       id: "c3150c21-425e-456b-bec3-155bf531bf8f",
       name: "Jorge Prego",
       email: "JorgePrego2@gmail.com",
