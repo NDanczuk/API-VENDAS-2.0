@@ -21,7 +21,6 @@ describe("CreateUser", () => {
       email: "JorgPrego@gmail.com",
       password: "prego",
     });
-
     expect(user).toHaveProperty("id");
   });
 

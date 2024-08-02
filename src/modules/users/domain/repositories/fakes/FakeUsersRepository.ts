@@ -8,8 +8,25 @@ class FakeUsersRepository implements IUsersRepository {
     {
       name: "Jorge Prego",
       email: "Prego@gmail.com",
-      password: "Prego",
+      password: "$2a$08$vAGSsc8xPZ57eL0mL8ufsuxnCPZmGMk1Vr.dUw9qkx96kG6KpT47O", // password: prego
       id: "c3150c21-425e-456b-bec3-155bf531bf8f",
+      created_at: new Date(2024),
+      updated_at: new Date(2024),
+      avatar:
+        "/home/nicolasdanczuck/workspace/VS/API-VENDAS-2.0/uploads/49c3faf5a3a8260123a1-20240622_160537.jpg",
+      getAvatarUrl(): string | null {
+        if (!this.avatar) {
+          return null;
+        }
+
+        return `${process.env.APP_API_URL}/files/${this.avatar}`;
+      },
+    },
+    {
+      name: "Zezo",
+      email: "Zezo@gmail.com",
+      password: "$2a$08$vAGSsc8xPZ57eL0mL8ufsuxnCPZmGMk1Vr.dUw9qkx96kG6KpT47O", // password: prego
+      id: "55604434-84da-4679-8e91-2fe5cc1f5cdf",
       created_at: new Date(2024),
       updated_at: new Date(2024),
       avatar:
