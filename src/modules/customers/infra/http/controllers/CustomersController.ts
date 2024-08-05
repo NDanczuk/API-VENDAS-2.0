@@ -5,12 +5,16 @@ import DeleteCustomerService from "@modules/customers/services/DeleteCustomerSer
 import ListCustomerService from "@modules/customers/services/ListCustomerService";
 import ShowCustomerService from "@modules/customers/services/ShowCustomerService";
 import UpdateCustomerService from "@modules/customers/services/UpdateCustomerService";
+
 export default class CustomersController {
   // List all customers
   public async index(request: Request, response: Response): Promise<Response> {
+    const page = request.query.page ? Number(request.query.page) : 1;
+    const limit = request.query.limit ? Number(request.query.page) : 15;
+
     const listCustomers = container.resolve(ListCustomerService);
 
-    const customers = await listCustomers.execute();
+    const customers = await listCustomers.execute({ page, limit });
 
     return response.json(customers);
   }
