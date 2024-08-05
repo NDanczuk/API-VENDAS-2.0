@@ -1,15 +1,18 @@
 import Product from "../entities/Product";
-import { getRepository, In, Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { IProductsRepository } from "@modules/products/domain/repositories/IProductsRepository";
 import { IFindProducts } from "@modules/products/domain/models/IFindProduct";
 import { ICreateProduct } from "@modules/products/domain/models/ICreateProduct";
 import { IUpdateStockProduct } from "@modules/products/domain/models/IUpdateStockProduct";
+import { dataSource } from "@shared/infra/typeorm";
+import { SearchParams } from "@modules/products/domain/repositories/IProductsRepository";
+import { IProductPaginate } from "@modules/products/domain/models/IProductPaginate";
 
 class ProductsRepository implements IProductsRepository {
   private ormRepository: Repository<Product>;
 
   constructor() {
-    this.ormRepository = getRepository(Product);
+    this.ormRepository = dataSource.getRepository(Product);
   }
 
   public async create({
@@ -38,25 +41,40 @@ class ProductsRepository implements IProductsRepository {
     await this.ormRepository.save(products);
   }
 
-  public async findByName(name: string): Promise<Product | undefined> {
-    const product = this.ormRepository.findOne({
-      where: {
-        name,
-      },
+  public async findByName(name: string): Promise<Product | null> {
+    const product = await this.ormRepository.findOneBy({
+      name,
     });
     return product;
   }
 
-  public async findById(id: string): Promise<Product | undefined> {
-    const product = this.ormRepository.findOne(id);
+  public async findById(id: string): Promise<Product | null> {
+    const product = await this.ormRepository.findOneBy({
+      id,
+    });
 
     return product;
   }
 
-  public async findAll(): Promise<Product[]> {
-    const products = this.ormRepository.find();
+  public async findAll({
+    page,
+    skip,
+    take,
+  }: SearchParams): Promise<IProductPaginate> {
+    const [customers, count] = await this.ormRepository
+      .createQueryBuilder()
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
 
-    return products;
+    const result = {
+      per_page: take,
+      total: count,
+      current_page: page,
+      data: customers,
+    };
+
+    return result;
   }
 
   public async findAllByIds(products: IFindProducts[]): Promise<Product[]> {
